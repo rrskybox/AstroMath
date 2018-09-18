@@ -578,9 +578,11 @@ namespace AstroMath
         {
             // Calulates a new RA/Decimal position that is a specific distance and direction from the initial position
 
-            Celestial.RADec endPosition = initialPosition;
-            endPosition.RA += distanceRadians * Math.Sin(positionAngle);
-            endPosition.Dec += distanceRadians * Math.Cos(positionAngle);
+            Celestial.RADec endPosition = new Celestial.RADec
+            {
+                RA = initialPosition.RA + (distanceRadians * Math.Sin(positionAngle)),
+                Dec = initialPosition.Dec + (distanceRadians * Math.Cos(positionAngle))
+            };
             return endPosition;
         }
 
