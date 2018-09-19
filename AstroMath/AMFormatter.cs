@@ -2,9 +2,8 @@
 
 namespace AstroMath
 {
-    class Formatters
+    public class Formatters
     {
-
         public static string HourString(double dvalue)
         //Converts a double value (dvalue) to a string looking like an hour:minutes
         {
