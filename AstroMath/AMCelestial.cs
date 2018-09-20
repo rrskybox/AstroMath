@@ -574,7 +574,7 @@ namespace AstroMath
 
         #region Astronomical Operations Methods
 
-        public static Celestial.RADec ComputePositionFromDistanceAndBearing(Celestial.RADec initialPosition, double distanceRadians, double bearingRadians)
+        public static Celestial.RADec ComputePositionFromBearingAndRange(Celestial.RADec initialPosition, double bearingRadians, double rangeRadians )
         {
             /* Calulates a new RA/Decimal position that is a specific distance and direction from the initial position
 
@@ -584,10 +584,10 @@ namespace AstroMath
             *                          math.cos(d/R)-math.sin(lat1)*math.sin(lat2))
            */
             Celestial.RADec endPosition = new Celestial.RADec();
-            endPosition.Dec = Math.Asin(Math.Sin(initialPosition.Dec) * Math.Cos(distanceRadians) +
-                                        Math.Cos(initialPosition.Dec) * Math.Sin(distanceRadians) * Math.Cos(bearingRadians));
-            endPosition.RA = initialPosition.RA + Math.Atan2(Math.Sin(bearingRadians) * Math.Sin(distanceRadians) * Math.Cos(initialPosition.Dec),
-                                                Math.Cos(distanceRadians) - Math.Sin(initialPosition.Dec) * Math.Sin(endPosition.Dec));
+            endPosition.Dec = Math.Asin(Math.Sin(initialPosition.Dec) * Math.Cos(rangeRadians) +
+                                        Math.Cos(initialPosition.Dec) * Math.Sin(rangeRadians) * Math.Cos(bearingRadians));
+            endPosition.RA = initialPosition.RA + Math.Atan2(Math.Sin(bearingRadians) * Math.Sin(rangeRadians) * Math.Cos(initialPosition.Dec),
+                                                Math.Cos(rangeRadians) - Math.Sin(initialPosition.Dec) * Math.Sin(endPosition.Dec));
             return endPosition;
         }
 
