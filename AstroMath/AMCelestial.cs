@@ -345,7 +345,7 @@ namespace AstroMath
         }
 
         //LSTTOLOCALTIME(Date/time as utc datetime) -> local hours (hours) as double:
-        public static double LSTToLocalTime(double lst, double longitudeD)
+        public static double LSTToLocalTimeHours(double lst, double longitudeD, bool dst)
         {
             double JD0 = (int)(DateToJulian(DateTime.UtcNow)) + 0.5;
             double gt = 6.656306 + 0.0657098242 * (JD0 - 2445700.5) + 1.0027379093 * (DateTime.UtcNow.Hour + DateTime.UtcNow.Minute / 60.0);
@@ -359,13 +359,14 @@ namespace AstroMath
         }
 
         //GSTTOLST(GST hours as double, longitude (radians) as double) -> LST hours as double:
-        public static double GSTToLST(double gst, double longitude)
+        public static double GSTToLST(double gst, double longitudeR)
         {
             //   Compute Local Sideral Time in hours from Greenich Sidereal Time in hours at a longitude in radians
             //Local Sidereal Time is Greenwich Sidereal Time decremented by 1 hour per 15 degrees of site longitude, independent of date
             //gsth is GST in hours
-            //site is longitude in radians -- positive for east longitude
-            double lst = (gst - Transform.RadiansToHours(longitude) + 24) % 24.0;
+            //site is longitude in radians -- positive for east longitude (-pi,+pi)
+            //double lst = ((gst + Transform.RadiansToHours(longitudeR)) + 24) % 24;
+            double lst = gst + Transform.RadiansToHours(longitudeR);
             return lst;
         }
 
@@ -574,7 +575,7 @@ namespace AstroMath
 
         #region Astronomical Operations Methods
 
-        public static Celestial.RADec ComputePositionFromBearingAndRange(Celestial.RADec initialPosition, double bearingRadians, double rangeRadians )
+        public static Celestial.RADec ComputePositionFromBearingAndRange(Celestial.RADec initialPosition, double bearingRadians, double rangeRadians)
         {
             /* Calulates a new RA/Decimal position that is a specific distance and direction from the initial position
 
@@ -625,10 +626,12 @@ namespace AstroMath
                 return;
             }
 
-            //Parameterized constructor -- -pi <= lat <= +pi;  0 <= lon <= +pi
+            //Parameterized constructor -- -pi <= lat <= +pi;  -pi <= lon <= +pi
             public LatLon(double latitude, double longitude)
             {
                 r_lat = latitude % Math.PI;
+                 r_lon = longitude % TWOPI;
+              
                 if (r_lat < 0)
                 {
                     r_lat_dir = "S";
@@ -639,7 +642,7 @@ namespace AstroMath
                     r_lat_dir = "N";
                     r_lat_deg = (360.0 * r_lat / TWOPI);
                 }
-                r_lon = Math.Abs(longitude) % (TWOPI);
+
                 if (longitude >= Math.PI)
                 {
                     r_lon_dir = "E";
@@ -653,7 +656,6 @@ namespace AstroMath
             }
 
             public double Lat => r_lat;
-
             public double Lon => r_lon;
 
             public string GetLatitudeString()
@@ -737,20 +739,22 @@ namespace AstroMath
                 //(latitude is the observer//s latitude in radians) ->
                 //   Compute altitude at declination given latitude and hourangle
                 //  alt  =  altitude of object as seen from latLon at utc
+                //
                 double alt = Math.Asin((Math.Sin(dr_Dec) * Math.Sin(location.Lat)) + (Math.Cos(dr_Dec) * Math.Cos(location.Lat) * Math.Cos(haR)));
-                //   az  :=  azimuth of object as seen from latLon at utc 
                 return alt;
             }
             //         
+
             public double Azimuth(double haR, LatLon loc)
             {
                 //Computes Azimuth (radians) of the RADec object for the given latitude and hour angle
                 //  RADec.MakeAltAz -> AltAz
-                //(ha is an object//s hour angle in radians) and
+                //(ha is an object//s hour angle in radians (-pi,+pi) and
                 //(latitude is the observer//s latitude in radians) ->
                 //return position in the observer//s sky
                 //  alt  =  altitude of object as seen from latLon at utc
-                double alt = Math.Asin(Math.Sin(dr_Dec) * Math.Sin(loc.Lat) + Math.Cos(dr_Dec) * Math.Cos(loc.Lat) * Math.Cos(haR));
+                //double alt = Math.Asin(Math.Sin(dr_Dec) * Math.Sin(loc.Lat) + Math.Cos(dr_Dec) * Math.Cos(loc.Lat) * Math.Cos(haR));
+                double alt = Altitude(haR, loc);
                 //   az  :=  azimuth of object as seen from latLon at utc 
                 double czm = Math.Acos((Math.Sin(dr_Dec) - Math.Sin(alt) * Math.Sin(loc.Lat)) / (Math.Cos(alt) * Math.Cos(loc.Lat)));
                 //if (sin(HA) is negative,) { Azm = Azm, otherwise Azm = 2pi - Azm    
@@ -760,16 +764,16 @@ namespace AstroMath
                 { return TWOPI - czm; }
             }
 
-            //    //Calculate the hour angle(radians) for the current time &location
+            //    
             public double HourAngle(DateTime utcdate, LatLon location)
-            { //in radians
+            { //Calculate the hour angle(radians -- [-pi,+pi] ) for the current utc time & location (longitude -pi,+pi)
               //int haR = Celestial.HoursToRadians(Celestial.RAToHourAngle(r_RA, ldate, loc.Lon))
               //   Compute hourangle from RA in radians at Universal date & time and east longitude
                 double lstH = GSTToLST(DateUTCToGST(utcdate), location.Lon);
                 double lstR = Transform.HoursToRadians(lstH);
                 double haR = (lstR - dr_RA);
-                if (haR < 0)
-                { haR += TWOPI; }
+                //if (haR < 0)
+                //{ haR += TWOPI; }
                 return haR;
             }
 

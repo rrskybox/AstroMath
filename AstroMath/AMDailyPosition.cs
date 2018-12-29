@@ -73,6 +73,7 @@ namespace AstroMath
             sett = false;
             AboveToStart = false;
             thour = 1;
+            double altitude = tradec.Altitude(tradec.HourAngle(udate.AddHours(thour - 1), tlatlon), tlatlon);
             yminus = Math.Sin(tradec.Altitude(tradec.HourAngle(udate.AddHours(thour - 1), tlatlon), tlatlon)) - sinMinAltD;
             if (yminus > 0)
             {
@@ -302,13 +303,13 @@ namespace AstroMath
             return;
         }
 
-        public bool IsUp(DateTime positionTime)
-        {
-            //Method returns true if (this object daily postion is above the horizon at the 
-            //  positionTime or false if (it is not
-            //if (()) {
-            return true;
-        }
+        //public bool IsUp(DateTime positionTime)
+        //{
+        //    //Method returns true if (this object daily postion is above the horizon at the 
+        //    //  positionTime or false if (it is not
+        //    //if (()) {
+        //    return true;
+        //}
 
         #region Astronomical Methods
 

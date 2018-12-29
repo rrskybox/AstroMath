@@ -46,7 +46,7 @@ namespace AstroMath
         }
 
         //RADIANSTOHOURS(Radians as double) -> hours as double:
-        //   Convert radians To hours (0-24)
+        //   Convert radians To hours (-24,+24)
         public static double RadiansToHours(double radians)
         {
             //Convert radians to hours (15 degrees).
@@ -54,7 +54,7 @@ namespace AstroMath
         }
 
         //HOURSTODEGREES(Hours as double) -> Degrees as double:
-        //   Convert hours(0 - 24 hour clock) to degrees (0-360.0)
+        //   Convert hours(-24,+24) to degrees (-360, +360)
         public static double HoursToDegrees(double hours)
         {
             //Convert hours in timespan to degrees (15 degrees per hour)
@@ -63,7 +63,7 @@ namespace AstroMath
         }
 
         //DEGREESTOHOURS(Degrees as double) -> Hours as double:
-        //   Convert degrees(0 - 360.0) To hours (0-24)
+        //   Convert degrees(-360,+360) To hours (-24,+24)
         public static double DegreesToHours(double degrees)
         {
             //Convert degrees to hours (15 degrees).
@@ -72,7 +72,7 @@ namespace AstroMath
 
         /// <summary>
         /// HourAngleToPolarAngle translates HourAngle (0 hour at 6 oclock) in hours
-        ///     to Polar Coordinate (0 degrees at 3 oclock) in radians
+        ///     to Polar Coordinate (0 radians at 3 oclock) in radians (-2pi,+2pi)
         /// </summary>
         /// <param name="HA"></param>
         public static double HourAngleToPolarAngle(double haH)
@@ -86,48 +86,29 @@ namespace AstroMath
         #endregion
 
         #region Normalizing Methods
-        /// <summary>
-        /// NormalizeDegreeAngle converts angle in degrees to 0-360 range
-        /// </summary>
-        /// <param name="angleD"></param>
-        /// <returns>
-        /// degrees 0-360
-        /// </returns>
+
         public static double NormalizeDegreeRange(double angleD)
         {
-            if (angleD < 0)
-            { angleD = angleD + 360; }
-            if (angleD > 360)
-            {
-                angleD = angleD % 360;
-            }
-            return (angleD);
+         // Converts angle in degrees (open) to degrees (0,360)
+           return (((angleD % 360.0) + 360.0) % 360.0);
         }
 
-        /// <summary>
-        ///  NormalizeRadianAngle converts angle in radians to 0-2Pi range
-        /// </summary>
-        /// <param name="angleR"></param>
-        /// <returns></returns>
-        public static double NormalizeRadianRange(double angleR)
+           public static double NormalizeRadianRange(double angleR)
         {
-            if (angleR < 0)
-            { angleR = angleR + Celestial.TWOPI; }
-            if (angleR > Celestial.TWOPI)
-            {
-                angleR = angleR % Celestial.TWOPI;
-            }
-            return (angleR);
+          // Converts angle in radians (open) to radians (-2pi, +2pi)
+           return (((angleR % Celestial.TWOPI ) + Celestial.TWOPI) % Celestial.TWOPI);
         }
 
-        public static double NormalizeHours(TimeSpan hours)
+          public static double NormalizeHours(TimeSpan hours)
         {
-            return (((hours.TotalHours) + 24.0) % 24.0);
+            // Converts timespan hours (open) to hours (0,24)
+            return (((hours.TotalHours % 24.0) + 24.0) % 24.0);
         }
 
         public static double NormalizeHours(double hours)
         {
-            return ((hours + 24.0) % 24.0);
+            // Converts hours (open) to hours (-24,+24)
+            return (((hours % 24.0) + 24.0) % 24.0);
         }
 
         #endregion
