@@ -87,29 +87,34 @@ namespace AstroMath
 
         #region Normalizing Methods
 
-        public static double NormalizeDegreeRange(double angleD)
-        {
-         // Converts angle in degrees (open) to degrees (0,360)
-           return (((angleD % 360.0) + 360.0) % 360.0);
-        }
+        /// <summary>
+        ///  Converts angle in degrees (open) to degrees (0,360)
+        /// </summary>
+        /// <param name="angleD"></param>
+        /// <returns></returns>
+        public static double NormalizeDegreeRange(double angleD) => ((angleD % 360.0) + 360.0) % 360.0;
 
-           public static double NormalizeRadianRange(double angleR)
-        {
-          // Converts angle in radians (open) to radians (-2pi, +2pi)
-           return (((angleR % Celestial.TWOPI ) + Celestial.TWOPI) % Celestial.TWOPI);
-        }
+        /// <summary>
+        /// Converts angle in radians (open) to radians (-2pi, +2pi)
+        /// </summary>
+        /// <param name="angleR"></param>
+        /// <returns></returns>
+        public static double NormalizeRadianRange(double angleR) => ((angleR % Celestial.TWOPI) + Celestial.TWOPI) % Celestial.TWOPI;
 
-          public static double NormalizeHours(TimeSpan hours)
-        {
-            // Converts timespan hours (open) to hours (0,24)
-            return (((hours.TotalHours % 24.0) + 24.0) % 24.0);
-        }
+        /// <summary>
+        /// Converts timespan hours (open) to hours (0,24)
+        /// </summary>
+        /// <param name="hours"></param>
+        /// <returns></returns>
+        public static double NormalizeHours(TimeSpan hours) => ((hours.TotalHours % 24.0) + 24.0) % 24.0;
 
-        public static double NormalizeHours(double hours)
-        {
-            // Converts hours (open) to hours (-24,+24)
-            return (((hours % 24.0) + 24.0) % 24.0);
-        }
+        /// <summary>
+        /// Converts hours (open) to hours (-24,+24)
+        /// </summary>
+        /// <param name="hours"></param>
+        /// <returns></returns>
+        public static double NormalizeHours(double hours) => ((hours % 24.0) + 24.0) % 24.0;
+
 
         #endregion
     }

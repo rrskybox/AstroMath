@@ -85,5 +85,13 @@ namespace AstroMath
             return T;
         }
 
-      }
+        public static double DotProduct(double[] a, double[] b)
+        {
+            //Computes the dot product of two vectors
+            if (a.Length != b.Length) return 0;
+            double dp = 0;
+            for (int i = 0; i < a.Length; i++) { dp += a[i] * b[i]; }
+            return dp;
+        }
+    }
 }

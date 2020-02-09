@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AstroMath</RootNamespace>
     <AssemblyName>AstroMath</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -46,9 +47,12 @@
     <Compile Include="AMDailyPosition.cs" />
     <Compile Include="AMFormatter.cs" />
     <Compile Include="AMPlanarMath.cs" />
+    <Compile Include="AMPolar2.cs" />
     <Compile Include="AMSkyDrawing.cs" />
-    <Compile Include="AMSpherical.cs" />
+    <Compile Include="AMPolar3.cs" />
     <Compile Include="AMTransform.cs" />
+    <Compile Include="Historgram.cs" />
+    <Compile Include="Matrix.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
