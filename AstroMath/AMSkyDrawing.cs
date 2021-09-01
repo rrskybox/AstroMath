@@ -16,33 +16,33 @@ namespace AstroChart
         private Rectangle skyMapRectangle;  //base rectangle for sky background
         private Point smCenter; //center of skymap in xy pixels
         private double smRadius; //radius of skymap in pixels
-        private double smObsLatD; //observer's location in latitude
+        private double smObsLatD; //observer//s location in latitude
         private Point northPoint;  //location of top of map
         private Point southPoint;  //location of bottom of map
         private Point eastPoint; //location of left side of map
         private Point westPoint; //location of right side of map
         private Point northPole;   //location of north pole on sky map
 
-        public SkyView(Graphics fcntl, Point centerPoint, float radius, float observersLatitude)
+        public SkyView(Graphics fcntl, Point centerPoint, float gRadius, float observersLatitude)
 
         {
             gpho = fcntl;
             smCenter = centerPoint;
-            smRadius = radius;
+            smRadius = gRadius;
             smObsLatD = observersLatitude;
 
             //Derive a upper left corner and size for a rectangle that defines
             //  a circle centered on centerpoint with a radius of radius
             //Builds the background image at centerPoint of radius 
-            Point leftCorner = new Point((centerPoint.X - (int)radius), (centerPoint.Y - (int)radius));
-            Size skyMapSize = new Size((int)(2 * radius), (int)(2 * radius));
+            Point leftCorner = new Point((centerPoint.X - (int)gRadius), (centerPoint.Y - (int)gRadius));
+            Size skyMapSize = new Size((int)(2 * gRadius), (int)(2 * gRadius));
             skyMapRectangle = new Rectangle(leftCorner, skyMapSize);
             //Generate a few reference points -- top and bottom (north and south points) and north pole
-            northPoint = new Point((int)centerPoint.X, (int)(centerPoint.Y - radius));
-            southPoint = new Point((int)centerPoint.X, (int)(centerPoint.Y + radius));
-            westPoint = new Point((int)(centerPoint.X + radius), (int)centerPoint.Y);
-            eastPoint = new Point((int)(centerPoint.X - radius), (int)centerPoint.Y);
-            northPole = new Point((int)centerPoint.X, (int)(centerPoint.Y - (radius * Math.Cos(Transform.DegreesToRadians(observersLatitude)))));
+            northPoint = new Point((int)centerPoint.X, (int)(centerPoint.Y - gRadius));
+            southPoint = new Point((int)centerPoint.X, (int)(centerPoint.Y + gRadius));
+            westPoint = new Point((int)(centerPoint.X + gRadius), (int)centerPoint.Y);
+            eastPoint = new Point((int)(centerPoint.X - gRadius), (int)centerPoint.Y);
+            northPole = new Point((int)centerPoint.X, (int)(centerPoint.Y - (gRadius * Math.Cos(Transform.DegreesToRadians(observersLatitude)))));
             Rectangle east90 = new Rectangle(northPole, new Size(northPole.X - eastPoint.X, eastPoint.Y - northPole.Y));
 
             Brush blackBrush = new SolidBrush(Color.Navy);

@@ -45,13 +45,11 @@
   <ItemGroup>
     <Compile Include="AMCelestial.cs" />
     <Compile Include="AMDailyPosition.cs" />
-    <Compile Include="AMFormatter.cs" />
     <Compile Include="AMPlanarMath.cs" />
     <Compile Include="AMPolar2.cs" />
     <Compile Include="AMSkyDrawing.cs" />
     <Compile Include="AMPolar3.cs" />
     <Compile Include="AMTransform.cs" />
-    <Compile Include="Historgram.cs" />
     <Compile Include="Matrix.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

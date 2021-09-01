@@ -72,7 +72,7 @@ namespace AstroMath
             public Point3()
             { }
 
-            public Point3(float ex, float ey, float ez, float ew)
+            public Point3(float ex, float ey, float ez)
             {
                 px = ex;
                 py = ey;
