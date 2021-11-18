@@ -250,7 +250,7 @@ namespace AstroMath
                 //Added code 8/13/20 to deal with negative declinations
                 double cosHA = (Math.Sin(altitude) - (Math.Sin(dr_Dec) * Math.Sin(location.Lat))) / (Math.Cos(dr_Dec) * Math.Cos(location.Lat));
                 if (cosHA > 1) cosHA -= 1;
-                if (cosHA < 1) cosHA += 1;
+                if (cosHA < 0) cosHA += 1;
                 return Math.Acos(cosHA);
                 //return Math.Acos((Math.Sin(altitude) - (Math.Sin(declination) * Math.Sin(location.Lat))) / (Math.Cos(dr_Dec) * Math.Cos(location.Lat)));
             }
