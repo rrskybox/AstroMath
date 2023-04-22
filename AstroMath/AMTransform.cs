@@ -70,12 +70,18 @@ namespace AstroMath
             return ((degrees / 360.0) * 24.0) % 24.0;
         }
 
-        /// <summary>
-        /// HourAngleToPolarAngle translates HourAngle (0 hour at 6 oclock) in hours
-        ///     to Polar Coordinate (0 radians at 3 oclock) in radians (-2pi,+2pi)
-        /// </summary>
-        /// <param name="HA"></param>
-        public static double HourAngleToPolarAngle(double haH)
+        public static double DegreesToArcSec(double deg)
+        {
+            return deg * 3600.0;
+        }
+
+
+            /// <summary>
+            /// HourAngleToPolarAngle translates HourAngle (0 hour at 6 oclock) in hours
+            ///     to Polar Coordinate (0 radians at 3 oclock) in radians (-2pi,+2pi)
+            /// </summary>
+            /// <param name="HA"></param>
+            public static double HourAngleToPolarAngle(double haH)
         {
             double haR = HoursToRadians(haH);
             double ha6R = HoursToRadians(6.0);

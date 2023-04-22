@@ -105,6 +105,10 @@ namespace AstroMath
         public const double COSEPS = 0.91748;
         public const double SINEPS = 0.39778;
         public const double ARC = 206264.8062;
+
+        public const double ASTRONOMICAL_UNIT = 149597870.700;  //km
+        public const double EARTH_RADIUS = 6371.0; //km
+
         #endregion
 
         #region RA Dec Class
@@ -195,7 +199,7 @@ namespace AstroMath
                 //  alt  =  altitude of object as seen from latLon at utc
                 //
                 double alt = Math.Asin((Math.Sin(dr_Dec) * Math.Sin(location.Lat)) + (Math.Cos(dr_Dec) * Math.Cos(location.Lat) * Math.Cos(haR)));
-                return alt;
+                return alt;  
             }
 
             /// <summary>
@@ -240,19 +244,18 @@ namespace AstroMath
             }
 
             /// <summary>
-            /// Computes HourAngle for a given altitude, celelestial location (RADec) and Celestial Location (lat/lon)
+            /// Computes HourAngle for a given altitude, Celelestial point (RADec) and Terrestrial Location (lat/lon)
             /// </summary>
             /// <param name="raDec"></param>
             /// <param name="location"></param>
-            /// <returns>HourAngle in radians</returns>
-            public double HourAngle(double altitude,  LatLon location)
+            /// <returns>HourAngle in hours</returns>
+            public double HourAngle(double altitude, LatLon location)
             {
-                //Added code 8/13/20 to deal with negative declinations
+                //sin(altitude) = sin(latitude)sin(declination) + cos(latitude)cos(declination)cos(local hour angle)
                 double cosHA = (Math.Sin(altitude) - (Math.Sin(dr_Dec) * Math.Sin(location.Lat))) / (Math.Cos(dr_Dec) * Math.Cos(location.Lat));
-                if (cosHA > 1) cosHA -= 1;
-                if (cosHA < 0) cosHA += 1;
-                return Math.Acos(cosHA);
-                //return Math.Acos((Math.Sin(altitude) - (Math.Sin(declination) * Math.Sin(location.Lat))) / (Math.Cos(dr_Dec) * Math.Cos(location.Lat)));
+                double arcCosHA = Math.Acos(cosHA);
+                return Transform.RadiansToHours(arcCosHA);
+                //sin(altitude) = sin(latitude)sin(declination) + cos(latitude)cos(declination)cos(local hour angle)
             }
 
             /// <summary>

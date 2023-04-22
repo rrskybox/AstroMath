@@ -11,7 +11,7 @@ namespace AstroMath
 
         //R. McAlister, V1.0, 12/5/16
         //
- 
+
         public enum VisibilityState
         {
             UpSome,
@@ -367,11 +367,11 @@ namespace AstroMath
             return (new Celestial.RADec(Transform.HoursToRadians(ra), Transform.DegreesToRadians(dec)));
         }
 
-        public static double MaxAltitude(DateTime DuskUTC, DateTime DawnUTC, Celestial.RADec position, Celestial.LatLon location)
+        public static double MaxAltitudeOld(DateTime DuskUTC, DateTime DawnUTC, Celestial.RADec position, Celestial.LatLon location)
         {
             //Computes the maximum altitude that a target at position (viewed from location) achieves 
             //   between Dusk and Dawn
-            //Returns duration in radians
+            //Returns altitude in radians
 
             double tMaxAlt = 0;
             double tDuskHArad = position.HourAngle(DuskUTC, location);
@@ -399,6 +399,78 @@ namespace AstroMath
             }
             return tMaxAlt;
         }
+
+        public static double MaxAltitude(DateTime DuskUTC, DateTime DawnUTC, Celestial.RADec position, Celestial.LatLon location)
+        {
+            //Computes the maximum altitude that a target at position (viewed from location) achieves 
+            //   between Dusk and Dawn
+            //Returns altitude in radians
+
+            //double tMaxAlt = 0;
+            double tMaxHArad = Transform.HoursToRadians(0.0);
+            double tDuskHArad = position.HourAngle(DuskUTC, location);
+            double tDawnHArad = position.HourAngle(DawnUTC, location);
+            double tDuskAltrad = position.Altitude(tDuskHArad, location);
+            double tDawnAltrad = position.Altitude(tDawnHArad, location);
+            double tMaxAltrad = position.Altitude(Transform.HoursToRadians(0.0), location);
+            //double darkHours = ((DawnUTC - DuskUTC).TotalHours); //in hours
+            //if HA = 0 is between dusk and dawn, then take the greater of the three altitudes
+            //  otherwise take the greater of the dusk and dawn altitudes
+            //  first pick the greater of the dusk and dawn altitudes
+            bool isPeakAtNight = tMaxHArad > tDuskHArad && tMaxHArad < tDawnAltrad;
+            if (tDuskAltrad > tDawnAltrad)  //dusk high
+                if (tMaxAltrad > tDuskAltrad)  //dusk high, but HA0 higher
+                    if (isPeakAtNight)
+                        return tMaxAltrad; //dusk high, but HA0 higher and at night
+                    else
+                        return tDuskAltrad; //dusk high, but HA0 higher but not at night
+                else
+                    return tDuskAltrad; //dusk highest
+            else //dawn high
+                if (tMaxAltrad > tDawnAltrad)  //dawn high, but HA0 higher
+                if (isPeakAtNight)
+                    return tMaxAltrad; //dawn high, but HA0 higher and at night
+                else
+                    return tDawnAltrad; //dawn high, but HA0 higher but not at night
+            else
+                return tDawnAltrad; //dawn highest
+        }
+
+        public static double MinAltitude(DateTime DuskUTC, DateTime DawnUTC, Celestial.RADec position, Celestial.LatLon location)
+        {
+            //Computes the maximum altitude that a target at position (viewed from location) achieves 
+            //   between Dusk and Dawn
+            //Returns altitude in radians
+
+            //double tMaxAlt = 0;
+            double tMinHArad = Transform.HoursToRadians(12.0);
+            double tDuskHArad = position.HourAngle(DuskUTC, location);
+            double tDawnHArad = position.HourAngle(DawnUTC, location);
+            double tDuskAltrad = position.Altitude(tDuskHArad, location);
+            double tDawnAltrad = position.Altitude(tDawnHArad, location);
+            double tLowestAltrad = position.Altitude(Transform.HoursToRadians(12.0), location);
+            //if HA = 0 is between dusk and dawn, then take the greater of the three altitudes
+            //  otherwise take the greater of the dusk and dawn altitudes
+            //  first pick the greater of the dusk and dawn altitudes
+            bool isLowAtNight = tMinHArad > tDuskHArad && tMinHArad < tDawnAltrad;
+            if (tDuskAltrad < tDawnAltrad)  //dusk lower than dawn
+                if (tLowestAltrad < tDuskAltrad)  //dusk low, but HA12 lower
+                    if (isLowAtNight)
+                        return tLowestAltrad; //dusk low, but HA12 lower and at night
+                    else
+                        return tDuskAltrad; //dusk low, but HA0 lower but not at night
+                else
+                    return tDuskAltrad; //dusk lowest
+            else //dawn lower than dusk
+                if (tLowestAltrad < tDawnAltrad)  //dawn low, but HA12 lower
+                if (isLowAtNight)
+                    return tLowestAltrad; //dawn low, but HA12 lower and at night
+                else
+                    return tDawnAltrad; //dawn low, but HA12 lower but not at night
+            else
+                return tDawnAltrad; //dawn lowest
+        }
+
         #endregion
     }
 }
