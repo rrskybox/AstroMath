@@ -68,21 +68,20 @@ namespace AstroMath
             Planar.QuadRoot solve;
 
             double sinMinAltD = Transform.SinD(tminAlt);   //Rise at h = 0 arcminutes 
-            DateTime udate = utcdateStart;
             rise = false;
             sett = false;
             AboveToStart = false;
             thour = 1;
-            double altitude = tradec.Altitude(tradec.HourAngle(udate.AddHours(thour - 1), tlatlon), tlatlon);
-            yminus = Math.Sin(tradec.Altitude(tradec.HourAngle(udate.AddHours(thour - 1), tlatlon), tlatlon)) - sinMinAltD;
+            double altitude = tradec.Altitude(tradec.HourAngle(utcdateStart .AddHours(thour - 1), tlatlon), tlatlon);
+            yminus = Math.Sin(tradec.Altitude(tradec.HourAngle(utcdateStart.AddHours(thour - 1), tlatlon), tlatlon)) - sinMinAltD;
             if (yminus > 0)
             {
                 AboveToStart = true;
             }
             do
             {
-                yzero = Math.Sin(tradec.Altitude(tradec.HourAngle(udate.AddHours(thour), tlatlon), tlatlon)) - sinMinAltD;
-                yplus = Math.Sin(tradec.Altitude(tradec.HourAngle(udate.AddHours(thour + 1), tlatlon), tlatlon)) - sinMinAltD;
+                yzero = Math.Sin(tradec.Altitude(tradec.HourAngle(utcdateStart.AddHours(thour), tlatlon), tlatlon)) - sinMinAltD;
+                yplus = Math.Sin(tradec.Altitude(tradec.HourAngle(utcdateStart.AddHours(thour + 1), tlatlon), tlatlon)) - sinMinAltD;
 
                 solve = Planar.Quad(yminus, yzero, yplus);
 
@@ -142,7 +141,7 @@ namespace AstroMath
             {
                 //Tar{ get { path starts below) { ascends above minimum altitude (e.g. horizon)
                 t_state = VisibilityState.Rises;
-                t_rise = udate.AddHours(utriseH);
+                t_rise =utcdateStart.AddHours(utriseH);
                 t_set = utcdateEnd;
                 //if (t_rise > t_set) {
                 //    t_set = t_set.AddDays(1)
@@ -153,7 +152,7 @@ namespace AstroMath
                 //Tar{ get { path starts above) { decends below minimum altitude (e.g. horizon)
                 t_state = VisibilityState.Falls;
                 t_rise = utcdateStart;
-                t_set = udate.AddHours(utsetH);
+                t_set = utcdateStart.AddHours(utsetH);
                 if (t_rise > t_set)
                 {
                     t_set = t_set.AddDays(1);
@@ -164,8 +163,8 @@ namespace AstroMath
                 //Tar{ get { path decends below) { rises above minimum altitude (e.g. horizon)
                 //Choose the longer of the two rise/set intervals 
                 t_state = VisibilityState.DownSome;
-                t_rise = udate.AddHours(utriseH);
-                t_set = udate.AddHours(utsetH);
+                t_rise = utcdateStart.AddHours(utriseH);
+                t_set = utcdateStart.AddHours(utsetH);
                 if ((t_set - i_rise) > (i_set - t_rise))
                 {
                     t_rise = i_rise;
@@ -186,8 +185,8 @@ namespace AstroMath
                     //Tar{ get { path rises above) { decends below minimum altitude (e.g. horizon)
                     //Save the 
                     t_state = VisibilityState.UpSome;
-                    t_rise = udate.AddHours(utriseH);
-                    t_set = udate.AddHours(utsetH);
+                    t_rise = utcdateStart.AddHours(utriseH);
+                    t_set = utcdateStart.AddHours(utsetH);
                     //set should be after rise
                     if (t_rise > t_set)
                     {
